@@ -1,0 +1,58 @@
+代码组织结果：
+    (一)
+    主类：Application.java 位于 root package下
+    实体层(entity) com.example.demo.domain(或者model)下，每一张表对应一个entity
+    数据访问层(repository) com.example.demo.repository下
+    逻辑层(service) com.example.demo.service 下
+    web(层) com.example.demo.web 下, 各种controller  提供RESTful API (get, post, put, delete )，
+
+    (二)
+    controller
+    model
+    service
+    common/util
+
+info：
+    @RequestMapping(value, method, produces, consumes, headers)
+        默认: get
+        1. 绑定多个uri
+        @RequestMapping(value={"uri1", "uri2"})
+        2. @RequestMapping provides produces and consumes variables where we can specify the request content-type
+            for which method will be invoked and the response content type
+        3. @PathVariable
+        @RequestMapping with @PathVariable: RequestMapping annotation can be used to handle dynamic URIs where one or more of the URI value works as a parameter. We can even specify Regular Expression for URI dynamic parameter to accept only specific type of input.
+        It works with @PathVariable annotation through which we can map the URI variable to one of the method arguments
+        处理动态uri,一个或者多个uir使用同一个参数时，使用@PathVariable
+
+        4. @RequestParam(value, default, required)
+
+    @RequestBody:
+        传入的是对象
+
+
+    @ResponseBody:
+        is a Spring annotation which binds a method return value to the web response body.  It uses HTTP Message
+        converters to convert the return value to HTTP response body, based on the content-type in the request HTTP header.
+        返回是对象
+
+    @Autowired
+
+    @Service
+
+    @Componet
+
+    @Configuration
+
+
+
+常见错误：
+1. method= RequestMethod.POST
+RequstBody, json
+错误：
+    2019-01-16 15:47:42.007 ERROR 60708 --- [io-8080-exec-10] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.http.converter.HttpMessageConversionException: Type definition error: [simple type, class com.example.demo.domain.NameEntity]; nested exception is com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of `com.example.demo.domain.NameEntity` (no Creators, like default construct, exist): cannot deserialize from Object value (no delegate- or property-based Creator)
+    at [Source: (PushbackInputStream); line: 2, column: 2]] with root cause
+原因：
+    在实体类中添加了一个方便实例化该类的构造函数，导致JVM不会添加默认的无参数的构造函数，在jackjson的反序列化需要无参构造函数
+解决：
+    在实体类中添加一个无参构造函数
+
